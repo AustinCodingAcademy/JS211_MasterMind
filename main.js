@@ -29,31 +29,23 @@ const getRandomInt = (min, max) => {
 }
 
 const generateHint = (guess) =>  {
-  // your code here
-  let hints = 0;
-  let hints2 = 0;
 
   let guessArray = guess.split('');
   let solutionArray = solution.split('');
+  let fullHints = 0;
+  let halfHints = 0;
   
-  guessArray.forEach(function(letter, i){
-      if(guessArray[i] == solutionArray[i]){
-      hints++; 
-      guessArray[i] = 0;
-      solutionArray[i] = 1;
+  for(let i = 0; i < guessArray.length; i++){ 
+    if(guessArray[i]  === solutionArray[i]){
+      fullHints++; 
+      solutionArray[i] = 0;
+    }else if(solutionArray.indexOf(guessArray[i]) > -1){
+      halfHints++; 
+      solutionArray[solutionArray.indexOf(guessArray[i])] = 1; 
     }
-  })
+  }
 
-  guessArray.forEach(function(guessLetter, index1){
-    solutionArray.forEach(function(solutionLetter, index2){
-      if(guessLetter == solutionLetter){
-        hints2++;
-        guessArray[index1] = 0;
-        solutionArray[index2] = 1;
-      }
-    })
-  })
-  return hints + "-" + hints2
+  return fullHints + '-' + halfHints; 
 }
 
 const mastermind = (guess) => {
@@ -66,14 +58,15 @@ const mastermind = (guess) => {
   }
 
   guess = guess.toLowerCase().trim(); 
-  
+
   if(guess == solution){
-    board = [];
-    console.log("You guessed it!")
+    board = []; 
+    console.log("You guessed it!");
     return "You guessed it!"; 
   }else if(board.length === 10){
     console.log("You lost! The solution was " + solution);
     board = [];
+    solution = ''; 
     generateSolution();
   }else{
     board.push(guess)
