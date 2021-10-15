@@ -4,47 +4,61 @@ const assert = require('assert');
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
-let board = [];
+let board = [''];
 let solution = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-const printBoard = () =>  {
+const printBoard = () => {
   for (let i = 0; i < board.length; i++) {
     console.log(board[i]);
   }
-}
+};
 
-const generateSolution = () =>  {
+const generateSolution = () => {
   for (let i = 0; i < 4; i++) {
     const randomIndex = getRandomInt(0, letters.length);
     solution += letters[randomIndex];
   }
-}
+};
 
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
-const generateHint = () =>  {
+const generateHint = (guess) => {
   // your code here
-}
+  let correctSpot = 0;
+  let correctLetter = 0;
+  let brokenSolution = Array.from(solution);
+  let brokenguess = Array.from(guess);
+  for (let i = 0; i < brokenSolution.length; i++) {
+    if (brokenSolution[i] == brokenguess[i]) {
+      correctSpot += 1;
+    } else if (brokenSolution.includes(brokenguess[i])) {
+      correctLetter += 1;
+    }
+    return correctSpot + '-' + correctLetter;
+  }
+};
 
 const mastermind = (guess) => {
   solution = 'abcd'; // Comment this out to generate a random solution
   // your code here
-}
+  if (guess == solution) {
+    return 'You guessed it!';
+  }
+};
 
-
-const getPrompt = () =>  {
+const getPrompt = () => {
   rl.question('guess: ', (guess) => {
     mastermind(guess);
     printBoard();
     getPrompt();
   });
-}
+};
 
 // Tests
 
@@ -67,11 +81,8 @@ if (typeof describe === 'function') {
     it('should generate hints if solution has duplicates', () => {
       assert.equal(generateHint('aabb'), '1-1');
     });
-
   });
-
 } else {
-
   generateSolution();
   getPrompt();
 }
