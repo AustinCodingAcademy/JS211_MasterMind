@@ -11,6 +11,8 @@ let board = [];
 let solution = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
+
+
 const printBoard = () =>  {
   for (let i = 0; i < board.length; i++) {
     console.log(board[i]);
@@ -28,13 +30,50 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const generateHint = () =>  {
-  // your code here
+const generateHint = (guess, solution) =>  {
+  let solutionArray = [solution[0],solution[1],solution[2],solution[3]]
+  let guessArray = [guess[0],guess[1],guess[2],guess[3]]
+  let correctLetterLocations = 0
+  let correctLetters = 0
+  
+
+
+  for (let i = 0; i < solutionArray.length; i++){
+    if (solutionArray[i] == guessArray[i]){
+      correctLetterLocations++
+      solutionArray[i] = null
+    }
+  }
+
+  for (let j = 0; j < solutionArray.length; j++){
+    let targetIndex = solutionArray.indexOf(guessArray[j])
+    if (targetIndex > -1){
+      correctLetters ++
+      solutionArray[targetIndex] = null
+    }
+  }
+
+  console.log(correctLetterLocations + '-' + correctLetters) 
+  
+
 }
 
 const mastermind = (guess) => {
-  solution = 'abcd'; // Comment this out to generate a random solution
-  // your code here
+  board.push(guess)
+  if (guess == solution){
+    console.log('You guessed it!')
+    return('You guessed it!')
+  } else {
+    generateHint(guess, solution)
+  }
+
+  if (board.length == 10){
+    console.log('You ran out of turns! The solution was ' + solution)
+    return 'You ran out of turns! The solution was ' + solution
+  } else {
+    return "Guess again"
+  }
+
 }
 
 
